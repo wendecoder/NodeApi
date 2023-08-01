@@ -7,7 +7,8 @@
     "express": "^4.17.1",
     "express-session": "^1.17.3",
     "mysql": "^2.18.1",
-    "validator": "^13.9.0"
+    "validator": "^13.9.0",
+    "md5": "^2.3.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
