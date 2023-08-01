@@ -1,6 +1,7 @@
 const setupInput = require('./inputSanitizer');
 const pool = require('./db'); // Import the database connection pool
 const validation = require('./validation'); // Importing the validation functions
+const md5 = require('md5');
 const express = require('express');
 const app = express();
 const port = 3000; // Set your desired port
@@ -23,7 +24,7 @@ app.get('/', (req, res) => {
 });
 
 // Implement the signup endpoint
-app.post('/signup', (req, res) => {
+app.post('/signup', async (req, res) => {
   const { username, email, password, confirm_pass } = req.body;
 
   const name = setupInput(username);
@@ -35,9 +36,10 @@ app.post('/signup', (req, res) => {
     res.status(400).json({ message: 'Passwords do not match' });
     return;
   }
+  const emailInUse = await validation.isUsed('email', userEmail, 'gotera_user_table');
 
-  if (validation.isUsed('email', userEmail, 'gotera_gotera_user_table')) {
-    res.status(400).json({ message: 'Email already in use' });
+  if (emailInUse) {
+    res.status(400).json({ message: 'Email already in use yeaye' });
     return;
   }
 

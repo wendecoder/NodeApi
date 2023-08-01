@@ -4,7 +4,7 @@ const dbConfig = {
   host: 'localhost',
   user: 'root',
   password: '',
-  database: 'edfet_',
+  database: 'ethiopiandigital_edf',
 };
 
 // Create a database connection pool
