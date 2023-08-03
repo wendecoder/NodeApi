@@ -3,6 +3,7 @@ const pool = require('./db'); // Import the database connection pool
 const validation = require('./validation'); // Importing the validation functions
 const md5 = require('md5');
 const express = require('express');
+const session = require('express-session');
 const app = express();
 const port = 3000; // Set your desired port
 
@@ -11,6 +12,11 @@ const port = 3000; // Set your desired port
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(session({
+  secret: 'adey', // Replace with your own secret key
+  resave: false,
+  saveUninitialized: true,
+}));
 // Enable CORS
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -69,7 +75,7 @@ app.post('/login', (req, res) => {
   }
 
   const sanitizedEmail = setupInput(email);
-  const sanitizedPassword = setupInput(password);
+  const sanitizedPassword = md5(setupInput(password));
 
   pool.getConnection((err, connection) => {
     if (err) {
@@ -94,7 +100,8 @@ app.post('/login', (req, res) => {
         req.session.isloggedin = true;
         return res.json({ message: 'Logged In' });
       } else {
-        return res.status(401).json({ message: 'Incorrect email or password.' });
+        const res = result.length;
+        return res.status(401).json({ message: res});
       }
     });
   });
